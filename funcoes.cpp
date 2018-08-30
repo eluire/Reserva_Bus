@@ -1,4 +1,4 @@
-#include"funções.h"
+#include"funcoes.h"
 using namespace std;
 
 void bem_vindo()
@@ -60,76 +60,74 @@ void horario(int &b)
     cin>>b;
     verificador(b);
 }
-void escolher_onibus(int a,int b,Onibus recM,Onibus recN,Onibus jpM,Onibus jpN)
+void escolher_onibus(int a,int b,Onibus &recM,Onibus &recN,Onibus &jpM,Onibus &jpN,string vetorbusrecM[MAXL],string vetorbusrecN[MAXL],string vetorbusjpM[MAXL],string vetorbusjpN[MAXL])
 {
     if(a==1&&b==1)
     {
-        reservafinal(recM);
+          mostrar_bus(vetorbusrecM);
+          reservafinal(recM,vetorbusrecM);
     }
     else if(a==1&&b==2)
     {
-        reservafinal(recN);
+        mostrar_bus(vetorbusrecN);
+        reservafinal(recN,vetorbusrecN);
     }
     else if(a==2&&b==1)
     {
-        reservafinal(jpM);
+        mostrar_bus(vetorbusjpM);
+        reservafinal(jpM,vetorbusjpM);
     }
     else
     {
-        reservafinal(jpN);
+          mostrar_bus(vetorbusjpN);
+          reservafinal(jpN,vetorbusjpN);
     }
 }
 
-void mostrar_bus()
+void mostrar_bus(string vetorbus[MAXL])
 {
-    char vetorbus[MAXL];
-    for(int i=0; i<MAXL; i++)
-    {
-        vetorbus[i]=i;
-    }
-    for(int i=0; i<MAXL; i++)
-    {
-        if(i<8)
-        {
-            cout<<"| 0"<<vetorbus[i]+1<<" 0"<<vetorbus[i]+2<<"  0"<<vetorbus[i]+3<<" 0"<<vetorbus[i]+4<<" |"<<endl;
-            i=i+3;
-        }
-        else
-        {
-            cout<<"| "<<vetorbus[i]+1<<" "<<vetorbus[i]+2<<"  "<<vetorbus[i]+3<<" "<<vetorbus[i]+4<<" |"<<endl;
-            i=i+3;
-        }
-    }
-
+    cout<<" ___________ "<<endl;
+    cout<<"| "<<vetorbus[0]<<" "<<vetorbus[1]<<"   "<<vetorbus[2]<<" "<<vetorbus[3]<<" |"<<endl;
+    cout<<"| "<<vetorbus[4]<<" "<<vetorbus[5]<<"   "<<vetorbus[6]<<" "<<vetorbus[7]<<" |"<<endl;
+    cout<<"| "<<vetorbus[8]<<" "<<vetorbus[9]<<"   "<<vetorbus[10]<<" "<<vetorbus[11]<<"|"<<endl;
+    cout<<"|"<<vetorbus[12]<<" "<<vetorbus[13]<<"  "<<vetorbus[14]<<" "<<vetorbus[15]<<"|"<<endl;
+    cout<<"|"<<vetorbus[16]<<" "<<vetorbus[17]<<"  "<<vetorbus[18]<<" "<<vetorbus[19]<<"|"<<endl;
+    cout<<"|"<<vetorbus[20]<<" "<<vetorbus[21]<<"  "<<vetorbus[22]<<" "<<vetorbus[23]<<"|"<<endl;
+    cout<<"|"<<vetorbus[24]<<" "<<vetorbus[25]<<"  "<<vetorbus[26]<<" "<<vetorbus[27]<<"|"<<endl;
+    cout<<"|"<<vetorbus[28]<<" "<<vetorbus[29]<<"  "<<vetorbus[30]<<" "<<vetorbus[31]<<"|"<<endl;
+    cout<<"|"<<vetorbus[32]<<" "<<vetorbus[33]<<"  "<<vetorbus[34]<<" "<<vetorbus[35]<<"|"<<endl;
+    cout<<"|"<<vetorbus[36]<<" "<<vetorbus[37]<<"  "<<vetorbus[38]<<" "<<vetorbus[39]<<"|"<<endl;
+    cout<<"|"<<vetorbus[40]<<" "<<vetorbus[41]<<"  "<<vetorbus[42]<<" "<<vetorbus[43]<<"|"<<endl;
+    cout<<"|"<<vetorbus[44]<<" "<<vetorbus[45]<<"  "<<vetorbus[46]<<" "<<vetorbus[47]<<"|"<<endl;
+    cout<<"|____________|"<<endl;
 }
-void reservafinal(Onibus &bus)// nao ta funcionando o get line para o nome
+void reservafinal(Onibus &bus,string vetorbus[MAXL])
 {
 h:
     int cont;
     cout<<""<<endl;
-    cout<<"Reserve sua poltrona:"<<endl;
+    cout<<"Reserve sua poltrona: "<<endl;
     cout<<endl;
-    cout<<" Digite o numero da sua poltrona:";
+    cout<<" Digite o numero da sua poltrona: ";
     cin>>cont;
     verificadordeassento(cont);
-    cout<<""<<endl;
-    if(bus.ocupantes[cont-1].assento.ocupado.compare("vazio")==0)// metodo para comparar strings
+    cout<<endl;
+    cin.ignore();
+    if(bus.ocupantes[cont].assento.ocupado.compare("vazio") == 0)// metodo para comparar strings
     {
         cout<<"digite seu nome: ";
-        cin>>bus.ocupantes[cont-1].nome;
-        //getline(cin,bus.ocupantes[cont-1].nome); naoooo ta funcionandoooo
+        getline(cin,bus.ocupantes[cont].nome);
         cout<<"digite o seu RG: ";
-        cin>>bus.ocupantes[cont-1].rg;
-        //getline(cin,bus.ocupantes[cont-1].rg);// metodo para pegar tudo que o usuario escreveu na linha nao ta funcionandooo
-        bus.ocupantes[cont-1].assento.ocupado="ocupado";
+        getline(cin,bus.ocupantes[cont].rg);// metodo para pegar tudo que o usuario escreveu na linha nao ta funcionandooo
+        bus.ocupantes[cont].assento.ocupado="ocupado";
         cout<<endl;
         cout<<"passagem reservada com sucesso!"<<endl;
-
+        vetorbus[cont]='x';
     }
     else
     {
         cout<<"lugar ocupado! tente outra poltrona"<<endl;
-        system("clear");
+        sleep(1);
         goto h;
     }
 }
@@ -162,81 +160,88 @@ void verificadordeassento(int &cont)
 
 void carregar_dados(Onibus &recM,Onibus &recN,Onibus &jpM,Onibus &jpN)
 {
+
     string line;
-    ifstream file_recifeM ("recM.txt");
+    ifstream file_recifeM;
+    file_recifeM.open("recM.txt");
     if (file_recifeM.is_open())
     {
         for(int i=0; i<MAXL; i++)
         {
-            getline (file_recifeM,line);
+            getline(file_recifeM,line);
             recM.ocupantes[i].assento.lugar=line;
-            getline (file_recifeM,line);
+            getline(file_recifeM,line);
             recM.ocupantes[i].assento.ocupado=line;
-            getline (file_recifeM,line);
+            getline(file_recifeM,line);
             recM.ocupantes[i].nome = line;
-            getline (file_recifeM,line);
+            getline(file_recifeM,line);
             recM.ocupantes[i].rg = line;
         }
     }
     file_recifeM.close();
 
-    ifstream file_recifeN ("recN.txt");
+    ifstream file_recifeN;
+    file_recifeN.open("recN.txt");
     if (file_recifeN.is_open())
     {
         for(int i=0; i<MAXL; i++)
         {
-            getline (file_recifeN,line);
+            getline(file_recifeN,line);
             recN.ocupantes[i].assento.lugar=line;
-            getline (file_recifeN,line);
+            getline(file_recifeN,line);
             recN.ocupantes[i].assento.ocupado=line;
-            getline (file_recifeN,line);
+            getline(file_recifeN,line);
             recN.ocupantes[i].nome = line;
-            getline (file_recifeN,line);
+            getline(file_recifeN,line);
             recN.ocupantes[i].rg = line;
 
         }
 
     }
-    file_recifeN .close();
+    file_recifeN.close();
 
-    ifstream file_joaoPM ("jpM.txt");
+    ifstream file_joaoPM;
+    file_joaoPM.open("jpM.txt");
     if (file_joaoPM.is_open())
     {
         for(int i=0; i<MAXL; i++)
         {
-            getline (file_joaoPM,line);
+            getline(file_joaoPM,line);
             jpM.ocupantes[i].assento.lugar=line;
-            getline (file_joaoPM,line);
+            getline(file_joaoPM,line);
             jpM.ocupantes[i].assento.ocupado=line;
-            getline (file_joaoPM,line);
+            getline(file_joaoPM,line);
             jpM.ocupantes[i].nome = line;
-            getline (file_joaoPM,line);
+            getline(file_joaoPM,line);
             jpM.ocupantes[i].rg = line;
         }
     }
     file_joaoPM.close();
 
-    ifstream file_joaoPN ("jpN.txt");
+    ifstream file_joaoPN;
+    file_joaoPN.open("jpN.txt");
     if (file_joaoPN .is_open())
     {
         for(int i=0; i<MAXL; i++)
         {
-            getline (file_joaoPN,line);
+            getline(file_joaoPN,line);
             jpN.ocupantes[i].assento.lugar=line;
-            getline (file_joaoPN,line);
+            getline(file_joaoPN,line);
             jpN.ocupantes[i].assento.ocupado=line;
-            getline (file_joaoPN,line);
+            getline(file_joaoPN,line);
             jpN.ocupantes[i].nome = line;
-            getline (file_joaoPN,line);
+            getline(file_joaoPN,line);
             jpN.ocupantes[i].rg = line;
         }
     }
-    file_joaoPN .close();
+    file_joaoPN.close();
 }
 
-void atualizar_dados(Onibus recM,Onibus recN,Onibus jpM,Onibus jpN) //
+void atualizar_dados(Onibus &recM,Onibus &recN,Onibus &jpM,Onibus &jpN)
 {
-    ofstream file_recifeM ("recM.txt");
+
+    ofstream file_recifeM;
+    file_recifeM.open("recM.txt", ofstream::out);
     if (file_recifeM.is_open())
     {
         for(int i=0; i<MAXL; i++)
@@ -250,7 +255,8 @@ void atualizar_dados(Onibus recM,Onibus recN,Onibus jpM,Onibus jpN) //
     }
     file_recifeM.close();
 
-    ofstream file_recifeN ("recN.txt");
+    ofstream file_recifeN;
+    file_recifeN.open("recN.txt", ofstream::out);
     if (file_recifeN.is_open())
     {
         for(int i=0; i<MAXL; i++)
@@ -263,7 +269,8 @@ void atualizar_dados(Onibus recM,Onibus recN,Onibus jpM,Onibus jpN) //
         }
     }
     file_recifeN.close();
-    ofstream file_joaoPM ("jpM.txt");
+    ofstream file_joaoPM;
+    file_joaoPM.open("jpM.txt", ofstream::out);
     if (file_joaoPM.is_open())
     {
         for(int i=0; i<MAXL; i++)
@@ -277,7 +284,8 @@ void atualizar_dados(Onibus recM,Onibus recN,Onibus jpM,Onibus jpN) //
     }
     file_joaoPM.close();
 
-    ofstream file_joaoPN ("jpN.txt");
+    ofstream file_joaoPN;
+    file_joaoPN.open("jpN.txt", ofstream::out);
     if (file_joaoPN.is_open())
     {
         for(int i=0; i<MAXL; i++)
@@ -291,4 +299,99 @@ void atualizar_dados(Onibus recM,Onibus recN,Onibus jpM,Onibus jpN) //
     }
 
     file_joaoPN.close();
+}
+void atualizar_bus(string vetorbusrecM[MAXL],string vetorbusrecN[MAXL],string vetorbusjpM[MAXL],string vetorbusjpN[MAXL])
+{
+    ofstream file_busrecM;
+    file_busrecM.open("vetorbusrecM.txt", ofstream::out);
+    if (file_busrecM.is_open())
+    {
+        for(int i=0; i<MAXL; i++)
+        {
+       file_busrecM<<vetorbusrecM[i]<<endl;
+        }
+    }
+    file_busrecM.close();
+    ofstream file_busrecN;
+    file_busrecN.open("vetorbusrecN.txt", ofstream::out);
+    if (file_busrecN.is_open())
+    {
+        for(int i=0; i<MAXL; i++)
+        {
+
+            file_busrecN<<vetorbusrecN[i]<<endl;
+        }
+    }
+    file_busrecN.close();
+    ofstream file_busjpM;
+    file_busjpM.open("vetorbusjpM.txt", ofstream::out);
+    if (file_busjpM.is_open())
+    {
+        for(int i=0; i<MAXL; i++)
+        {
+
+            file_busjpM<<vetorbusjpM[i]<<endl;
+        }
+    }
+    file_busjpM.close();
+    ofstream file_busjpN;
+    file_busjpN.open("vetorbusjpN.txt", ofstream::out);
+    if (file_busjpN.is_open())
+    {
+        for(int i=0; i<MAXL; i++)
+        {
+
+            file_busjpN<<vetorbusjpN[i]<<endl;
+        }
+    }
+    file_busjpN.close();
+}
+
+void caregar_bus(string vetorbusrecM[MAXL],string vetorbusrecN[MAXL],string vetorbusjpM[MAXL],string vetorbusjpN[MAXL])
+{
+    string line;
+    ifstream file_busrecM;
+    file_busrecM.open("vetorbusrecM.txt");
+    if (file_busrecM.is_open())
+    {
+        for(int i=0; i<MAXL; i++)
+        {
+            getline(file_busrecM,line);
+            vetorbusrecM[i]=line;
+        }
+        file_busrecM.close();
+        ifstream file_busrecN;
+        file_busrecN.open("vetorbusrecN.txt");
+        if (file_busrecN.is_open())
+        {
+            for(int i=0; i<MAXL; i++)
+            {
+                getline(file_busrecN,line);
+                vetorbusrecN[i]=line;
+            }
+        }
+        file_busrecN.close();
+        ifstream file_busjpM;
+        file_busjpM.open("vetorbusjpM.txt");
+        if (file_busjpM.is_open())
+        {
+            for(int i=0; i<MAXL; i++)
+            {
+                getline(file_busjpM,line);
+                vetorbusjpM[i]=line;
+            }
+        }
+        file_busjpM.close();
+        ifstream file_busjpN;
+        file_busjpN.open("vetorbusjpN.txt");
+        if (file_busjpN.is_open())
+        {
+            for(int i=0; i<MAXL; i++)
+            {
+                getline(file_busjpN,line);
+                vetorbusjpN[i]=line;
+            }
+        }
+        file_busjpN.close();
+}
 }

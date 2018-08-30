@@ -1,4 +1,4 @@
-#include"funções.h"
+#include"funcoes.h"
 #include <string>
 using namespace std;
 
@@ -6,36 +6,35 @@ using namespace std;
 int main()
 {
     int a,b;
-    char vetorbus[MAXL];
-    //declaração de structs
+    //declaração dos arrays de disponibilidade de poltronas
+    string vetorbusrecM[MAXL];
+    string vetorbusrecN[MAXL];
+    string vetorbusjpM[MAXL];
+    string vetorbusjpN[MAXL];
+    // declaração das estruturas
     Onibus recM;
     Onibus recN;
     Onibus jpM;
     Onibus jpN;
     bem_vindo();
-    m:
+m:
+    caregar_bus(vetorbusrecM,vetorbusrecN,vetorbusjpM,vetorbusjpN);
     carregar_dados(recM,recN,jpM,jpN);
     inicializador();
     cidade(a);
     system("clear");
     horario(b);
     system("clear");
-    mostrar_bus();
-    escolher_onibus(a,b,recM,recN,jpM,jpN);
+    escolher_onibus(a,b,recM,recN,jpM,jpN,vetorbusrecM,vetorbusrecN,vetorbusjpM,vetorbusjpN);
+    atualizar_dados(recM,recN,jpM,jpN);
+    atualizar_bus(vetorbusrecM,vetorbusrecN,vetorbusjpM,vetorbusjpN);
     int buy_again=voltar_menu();
     if(buy_again==1)
     {
-    atualizar_dados(recM,recN,jpM,jpN);
         goto m;
     }
     else
     {
-     atualizar_dados(recM,recN,jpM,jpN);
-        exit(0);
+        return 0;
     }
-
-
-
-    return 0;
 }
-
